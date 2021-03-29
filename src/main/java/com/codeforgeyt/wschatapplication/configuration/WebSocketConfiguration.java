@@ -12,16 +12,8 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @EnableWebSocket
 public class WebSocketConfiguration implements WebSocketConfigurer {
 
-    private final static String CHAT_ENDPOINT = "/chat";
-
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry webSocketHandlerRegistry) {
-        webSocketHandlerRegistry.addHandler(getChatWebSocketHandler(), CHAT_ENDPOINT)
-                .setAllowedOrigins("*");
-    }
-
-    @Bean
-    public WebSocketHandler getChatWebSocketHandler(){
-        return new ChatWebSocketHandler();
+        webSocketHandlerRegistry.addHandler(new ChatWebSocketHandler(), "/web-socket");
     }
 }
