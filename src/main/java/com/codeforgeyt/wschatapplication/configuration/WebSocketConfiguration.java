@@ -16,4 +16,6 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry webSocketHandlerRegistry) {
         webSocketHandlerRegistry.addHandler(new ChatWebSocketHandler(), "/web-socket");
     }
+
+    // What is the second argument for?
 }

@@ -10,17 +10,25 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ChatWebSocketHandler.class);
 
-    private final List<WebSocketSession> webSocketSessions = new ArrayList<>();
+//    private final List<WebSocketSession> webSocketSessions = new ArrayList<>();
+    private final List<WebSocketSession> webSocketSessions = new CopyOnWriteArrayList<>();
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         webSocketSessions.add(session);
         super.afterConnectionEstablished(session);
+    }
+
+    @Override
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+        webSocketSessions.remove(session);
+        super.afterConnectionClosed(session, status);
     }
 
     @Override
@@ -36,11 +44,5 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
                 LOGGER.error("Error occurred.", e);
             }
         });
-    }
-
-    @Override
-    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        webSocketSessions.remove(session);
-        super.afterConnectionClosed(session, status);
     }
 }
