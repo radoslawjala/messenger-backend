@@ -1,7 +1,6 @@
 package com.codeforgeyt.wschatapplication.dto;
 
 
-import com.codeforgeyt.wschatapplication.util.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,13 +16,12 @@ public class ChatMessage {
     private String time;
 
     public ChatMessage() {
-
     }
 
-    public ChatMessage(String from, String text, String recipient) {
+    public ChatMessage(String from, String text, String recipient, String time) {
         this.from = from;
         this.text = text;
         this.recipient = recipient;
-        this.time = StringUtils.getCurrentTimeStamp();
+        this.time = time;
     }
 }

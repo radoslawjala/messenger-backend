@@ -3,6 +3,7 @@ package com.codeforgeyt.wschatapplication.controller;
 import com.codeforgeyt.wschatapplication.dto.MessageResponse;
 import com.codeforgeyt.wschatapplication.dto.User;
 import com.codeforgeyt.wschatapplication.util.ActiveUserManager;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -13,17 +14,12 @@ import java.util.ArrayList;
 
 @RestController
 @CrossOrigin
+@Log4j2
 public class WebSocketConnectionRestController {
 
     @Autowired
     private ActiveUserManager activeSessionManager;
 
-//    @PostMapping(value = "/rest/user-connect")
-//    @CrossOrigin
-//    public void userConnect(@RequestBody String title) {
-//
-//        System.out.println(title);
-//    }
     @PostMapping("/rest/user-connect")
     public ResponseEntity<?> userConnect(@RequestBody User user, HttpServletRequest request) {
         String remoteAddr = "";
@@ -36,40 +32,22 @@ public class WebSocketConnectionRestController {
                 }
             }
         }
-//        System.out.println("username:" + user.getUserName() + ", remoteAddr: " + remoteAddr);
         activeSessionManager.add(user.getUsername(), remoteAddr);
-        return ResponseEntity.ok(new MessageResponse("powinno być sikalafa żelafą żymbalade sur nymbła"));
+        log.info("User " + user.getUsername() + " connected");
+        return ResponseEntity.ok(new MessageResponse("User " + user.getUsername() + " connected"));
     }
 
-//    @GetMapping("/rest/user-connect/info")
-//    public void tmp(HttpServletRequest request) {
-//        System.out.println("riszki sziszki");
-//        String remoteAddr = "";
-//        if (request != null) {
-//            remoteAddr = request.getHeader("Remote_Addr");
-//            if (StringUtils.isEmpty(remoteAddr)) {
-//                remoteAddr = request.getHeader("X-FORWARDED-FOR");
-//                if (remoteAddr == null || "".equals(remoteAddr)) {
-//                    remoteAddr = request.getRemoteAddr();
-//                    System.out.println(remoteAddr);
-//                }
-//            }
-//        }
-//    }
-
     @PostMapping("/rest/user-disconnect")
-    public String userDisconnect(@ModelAttribute("username") String userName) {
-        activeSessionManager.remove(userName);
-        return "disconnected";
+    public ResponseEntity<?> userDisconnect(@RequestBody User user) {
+        activeSessionManager.remove(user.getUsername());
+        log.info("User " + user.getUsername() + " disconnected");
+        return ResponseEntity.ok(new MessageResponse("User " + user.getUsername() + " disconnected"));
     }
 
     @GetMapping("/rest/active-users-except/{userName}")
     public ResponseEntity<?> getActiveUsersExceptCurrentUser(@PathVariable String userName) {
-        ArrayList<String> users = new ArrayList<>();
-        for(String name: activeSessionManager.getActiveUsersExceptCurrentUser(userName)) {
-            users.add(name);
-        }
-        System.out.println("Users list: " + users);
+        ArrayList<String> users = new ArrayList<>(activeSessionManager.getActiveUsersExceptCurrentUser(userName));
+        log.info("Active users: " + users);
         return ResponseEntity.ok(users);
     }
 }

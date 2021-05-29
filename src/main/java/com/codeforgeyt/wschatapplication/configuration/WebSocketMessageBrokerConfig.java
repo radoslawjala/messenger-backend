@@ -16,12 +16,11 @@ public class WebSocketMessageBrokerConfig implements WebSocketMessageBrokerConfi
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/topic", "/queue");
         config.setApplicationDestinationPrefixes("/app");
-//        config.setUserDestinationPrefix("/user");
+        config.setUserDestinationPrefix("/user");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/broadcast").setAllowedOrigins("http://localhost:4200").withSockJS().setHeartbeatTime(10_000);
         registry.addEndpoint("/chat").setAllowedOrigins("http://localhost:4200").withSockJS();
     }
 
