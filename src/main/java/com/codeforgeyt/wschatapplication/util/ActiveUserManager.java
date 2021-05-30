@@ -53,5 +53,9 @@ public class ActiveUserManager {
     private void notifyListeners() {
         notifyPool.submit(() -> listeners.forEach(ActiveUserChangeListener::notifyActiveUserChange));
     }
+
+    public boolean userAlreadyExists(String username) {
+        return map.containsKey(username);
+    }
 }
 

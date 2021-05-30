@@ -8,11 +8,13 @@ import lombok.Setter;
 public class MessageResponse {
 
     private String text;
+    private boolean userVerifiedSuccessfully;
 
     public MessageResponse() {
     }
 
-    public MessageResponse(String text) {
+    public MessageResponse(String text, boolean userVerifiedSuccessfully) {
         this.text = text;
+        this.userVerifiedSuccessfully = userVerifiedSuccessfully;
     }
 }
